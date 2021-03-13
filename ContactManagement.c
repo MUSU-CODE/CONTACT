@@ -1,16 +1,18 @@
 #include<stdio.h>
 #include<malloc.h>
+#include<string.h>
 struct Contact {
-    char* name;
+    char name[50];
     long long number;
 };
 struct Contact *c[200];
 int length=0;
-
-void insert(char* name,long long number) {
+void sort();
+void insert(char name[50],long long number) {
     c[length++]=(struct Contact*)malloc(sizeof(struct Contact));
-    c[length-1]->name=name;
+    strcpy(c[length-1]->name,name);
     c[length-1]->number=number;
+    sort();
 }
 
 void display() {
@@ -19,6 +21,24 @@ void display() {
     for(int i=0;i<length;i++)
         printf("\n%s\n%lld\n",c[i]->name,c[i]->number);
         
+}
+void sort() {
+    for(int i=0;i<length-1;i++) {
+        for(int j=i+1;j<length;j++) {
+            for(int k=0;c[i]->name[k]!='\0'&&c[j]->name[k]!='\0';k++) {
+                if(c[i]->name[k]>c[j]->name[k]) {
+                    struct Contact* t=c[i];
+                    c[i]=c[j];
+                    c[j]=t;
+                    break;
+                }
+                else if(c[i]->name[k]<c[j]->name[k]) {
+                    break;
+                }
+            }
+        }
+        //printf("%d   ",sizeof(c[i]->name));
+    }
 }
 //(struct Contact*)malloc(sizeof(struct Contact))
 void main() {
@@ -51,8 +71,13 @@ void main() {
         case 2:
             display();
             break;
-        default:
+        case 3:
+
+            break;
+        case 5:
             return;
+        default:
+            printf("Invalid option ....");
         }
     }
 }
