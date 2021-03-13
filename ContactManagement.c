@@ -1,24 +1,56 @@
 #include<stdio.h>
 #include<malloc.h>
+#include<string.h>
 struct Contact {
-    char* name;
+    char name[50];
     long long number;
 };
 struct Contact *c[200];
 int length=0;
+void sort();
+void add(int i,char name[50],long long number) {
+    c[i]=(struct Contact*)malloc(sizeof(struct Contact));
+    strcpy(c[i]->name,name);
+    c[i]->number=number;
+    sort();
+}
 
-void insert(char* name,long long number) {
+void insert(char name[50],long long number) {
     c[length++]=(struct Contact*)malloc(sizeof(struct Contact));
-    c[length-1]->name=name;
+    strcpy(c[length-1]->name,name);
     c[length-1]->number=number;
+    sort();
 }
 
 void display() {
     printf("\n--------contacts--------\n");
     printf("------------------------\n");
     for(int i=0;i<length;i++)
-        printf("\n%s\n%lld\n",c[i]->name,c[i]->number);
+        printf("%d.\n%s\n%lld\n\n",i+1,c[i]->name,c[i]->number);
         
+}
+void sort() {
+    for(int i=0;i<length-1;i++) {
+        for(int j=i+1;j<length;j++) {
+            for(int k=0;c[i]->name[k]!='\0'&&c[j]->name[k]!='\0';k++) {
+                if(c[i]->name[k]>c[j]->name[k]) {
+                    struct Contact* t=c[i];
+                    c[i]=c[j];
+                    c[j]=t;
+                    break;
+                }
+                else if(c[i]->name[k]<c[j]->name[k]) {
+                    break;
+                }
+            }
+        }
+        //printf("%d   ",sizeof(c[i]->name));
+    }
+}
+void Delete(int i) { 
+    for(int j=i;j<length-1;j++) 
+        c[j]=c[j+1];
+    length--;
 }
 //(struct Contact*)malloc(sizeof(struct Contact))
 void main() {
@@ -37,7 +69,7 @@ void main() {
         printf("4:delete the contact\n");
         printf("5:exit\n");
         printf("Choose any option to perform : ");
-        int choice;
+        int choice,i;
         scanf("%d",&choice);
         switch (choice)
         {
@@ -51,8 +83,34 @@ void main() {
         case 2:
             display();
             break;
-        default:
+        case 3:
+            display();
+            printf("Enter the number\nWhich contact do you want to replace : ");
+            scanf("%d",&i);
+            if(i<1&&i<length) {
+                printf("Invalid number");
+                break;
+            }
+            printf("\nEnter name : ");
+            scanf("%s",s);
+            printf("Enter number : ");
+            scanf("%lld",&l);
+            add(i-1,s,l);
+            break;
+        case 4:
+            display();
+            printf("Enter the number\nWhich contact do you want to delete : ");
+            scanf("%d",&i);
+            if(i<1&&i<length) {
+                printf("Invalid number");
+                break;
+            }
+            Delete(i-1);
+            break;
+        case 5:
             return;
+        default:
+            printf("Invalid option ....");
         }
     }
 }
